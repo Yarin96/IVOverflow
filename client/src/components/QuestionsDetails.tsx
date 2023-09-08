@@ -85,11 +85,16 @@ const QuestionDetails = () => {
 
   const postAnswerHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (answer === "") {
+    if (answer.trim() === "") {
       alert("Enter an answer before submitting! 🧐");
     } else {
       const tempToken = localStorage.getItem("token");
       const userName = localStorage.getItem("userName");
+
+      if (question.userPosted === userName) {
+        alert("You cannot comment on your own question. 🤯");
+        return;
+      }
 
       const submittedData = {
         userId: question._id,

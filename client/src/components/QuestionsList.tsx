@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import QuestionCard from "./QuestionCard";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setQuestionsList } from "../reducers/questionSlice";
 import { RootState } from "../store/store";
@@ -43,12 +43,20 @@ const QuestionsList: React.FC = () => {
       {isLoading ? (
         <CircularProgress />
       ) : (
-        <div>
-          <p>{filteredQuestions.length} questions</p>
-          {filteredQuestions.map((question, index) => (
-            <QuestionCard key={index} question={question} />
-          ))}
-        </div>
+        <Box>
+          {filteredQuestions.length === 0 ? (
+            <Typography>No questions yet!</Typography>
+          ) : (
+            <>
+              <Typography sx={{ marginBottom: "20px" }}>
+                {filteredQuestions.length} questions
+              </Typography>
+              {filteredQuestions.map((question, index) => (
+                <QuestionCard key={index} question={question} />
+              ))}
+            </>
+          )}
+        </Box>
       )}
     </>
   );

@@ -3,18 +3,50 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import AnswerCard from "./AnswerCard";
+import { makeStyles } from "@mui/styles";
 
-const AnswersList = ({ question }) => {
+interface QuestionCard {
+  question: {
+    _id: number | string;
+    upVotes: number;
+    downVotes: number;
+    noOfAnswers: number;
+    questionTitle: string;
+    questionBody: string;
+    questionTags: string[];
+    userPosted: string;
+    time: Date;
+    formattedTime: string;
+    answer: {
+      _id: string | number;
+      answerBody: string;
+      userAnswered: string;
+      answeredOn: Date;
+      upVotes: number;
+      downVotes: number;
+    }[];
+  };
+}
+
+const useStyles = makeStyles(() => ({
+  title: {
+    padding: "40px 20px 40px 20px",
+    display: "flex",
+    alignItems: "flex-start",
+    fontWeight: "bold !important",
+    fontSize: "22px !important",
+    color: "#ffbe04",
+  },
+}));
+
+const AnswersList: React.FC<QuestionCard> = ({ question }) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
+  const [answersData, setAnswersData] = useState(question.answer);
   const isLoading = useSelector((state: RootState) => state.question.isLoading);
   const refreshAnswersKey = useSelector(
     (state: RootState) => state.refreshAnswersKey
   );
-
-  const [answerData, setAnswerData] = useState(question.answer);
-
-  const totalVotes = question.downVotes + question.upVotes;
-  console.log(question.downVotes);
 
   useEffect(() => {
     const getAnswers = async () => {
@@ -29,7 +61,7 @@ const AnswersList = ({ question }) => {
           }
         );
         const data = await response.json();
-        setAnswerData(data);
+        setAnswersData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -38,15 +70,23 @@ const AnswersList = ({ question }) => {
     getAnswers();
   }, [dispatch, refreshAnswersKey, question._id]);
 
+  const sortedAnswers = answersData.slice().sort((a, b) => {
+    const votesA = a.upVotes - a.downVotes;
+    const votesB = b.upVotes - b.downVotes;
+    return votesB - votesA;
+  });
+
   return (
     <>
       {isLoading ? (
         <CircularProgress />
       ) : (
         <Box>
-          <Typography variant="h6">{answerData.length} Answers</Typography>
-          {answerData.map((answer, index) => (
-            <AnswerCard key={index} answer={answer} votes={totalVotes} />
+          <Typography className={classes.title}>
+            {answersData.length} Answers
+          </Typography>
+          {sortedAnswers.map((answer, index) => (
+            <AnswerCard key={index} answer={answer} question={question} />
           ))}
         </Box>
       )}

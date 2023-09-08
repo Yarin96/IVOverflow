@@ -6,10 +6,12 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
-interface QuestionCardProps {
+interface QuestionCard {
   question: {
-    _id: number | string;
+    _id: string;
     upVotes: number;
     downVotes: number;
     noOfAnswers: number;
@@ -17,7 +19,15 @@ interface QuestionCardProps {
     questionBody: string;
     questionTags: string[];
     userPosted: string;
-    time: string;
+    time: Date;
+    answer: {
+      _id: string | number;
+      answerBody: string;
+      userAnswered: string;
+      upVotes: number;
+      downVotes: number;
+      answeredOn: Date;
+    }[];
     formattedTime: string;
   };
 }
@@ -69,8 +79,33 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
+const QuestionCard: React.FC<QuestionCard> = ({ question }) => {
   const classes = useStyles();
+  const upVotes = useSelector((state: RootState) => {
+    const questionItem = state.question.questionsList.find(
+      (q) => q._id === question._id
+    );
+    if (questionItem) {
+      return questionItem.answer.reduce(
+        (totalUpVotes, answer) => totalUpVotes + answer.upVotes,
+        0
+      );
+    }
+    return 0;
+  });
+
+  const downVotes = useSelector((state: RootState) => {
+    const questionItem = state.question.questionsList.find(
+      (q) => q._id === question._id
+    );
+    if (questionItem) {
+      return questionItem.answer.reduce(
+        (totalDownVotes, answer) => totalDownVotes + answer.downVotes,
+        0
+      );
+    }
+    return 0;
+  });
 
   const shortenString = (string: string, num: number) => {
     if (string.length > num) {
@@ -84,9 +119,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     <Card className={classes.card}>
       <CardContent>
         <Box className={classes.statsContainer}>
-          <Typography variant="h6">
-            {question.upVotes - question.downVotes} Votes
-          </Typography>
+          <Typography variant="h6">{upVotes - downVotes} Votes</Typography>
         </Box>
         <Box className={classes.statsContainer}>
           <Typography variant="h6">{question.noOfAnswers} Answers</Typography>
