@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { LoadingButton } from "@mui/lab";
+import { DirectionsRunOutlined, SendRounded } from "@mui/icons-material";
 import MainContainer from "../shared/components/Container/MainContainer";
 import AnswersList from "./AnswersList";
 import { incrementRefreshKey } from "../reducers/refreshAnswersKey";
@@ -142,7 +143,8 @@ const QuestionDetails = () => {
               sx={{ color: "#6c5522", fontWeight: "bold", height: "100%" }}
               onClick={() => navigate(-1)}
             >
-              Back To Homepage
+              Back To Homepage&nbsp;
+              <DirectionsRunOutlined />
             </Button>
           </Box>
           <Box className={classes.card__header}>
@@ -207,7 +209,8 @@ const QuestionDetails = () => {
               loading={isSubmitting}
               onClick={postAnswerHandler}
             >
-              Post Answer
+              Post Answer&nbsp;&nbsp;
+              <SendRounded />
             </LoadingButton>
           </Grid>
         </CardContent>

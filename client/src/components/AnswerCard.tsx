@@ -14,6 +14,7 @@ interface AnswerCard {
     answeredOn: Date;
     upVotes: number;
     downVotes: number;
+    votes: { upVotes: string[]; downVotes: string[] };
   };
   question: {
     _id: number | string;
@@ -33,6 +34,7 @@ interface AnswerCard {
       answeredOn: Date;
       upVotes: number;
       downVotes: number;
+      votes: { upVotes: string[]; downVotes: string[] };
     }[];
   };
 }
@@ -73,15 +75,14 @@ const useStyles = makeStyles(() => ({
     marginTop: "18px",
     textAlign: "right",
   },
-  // button: {
-  //   backgroundColor: "transparent",
-  //   color: "inherit",
-  //   boxShadow: "none",
-  //   textTransform: "none",
-  //   borderRadius: 0,
-  //   padding: 0,
-  //   minWidth: "unset",
-  // },
+  button: {
+    backgroundColor: "transparent",
+    boxShadow: "none",
+    textTransform: "none",
+    borderRadius: 0,
+    padding: 0,
+    color: "orange",
+  },
 }));
 
 const AnswerCard: React.FC<AnswerCard> = ({ answer, question }) => {
@@ -104,10 +105,6 @@ const AnswerCard: React.FC<AnswerCard> = ({ answer, question }) => {
 
   const upVoteHandler = async () => {
     if (!voted) {
-      dispatch(
-        upVoteAnswer({ answerId: answer._id, questionId: question._id })
-      );
-
       try {
         const tempToken = localStorage.getItem("token");
         await fetch(
@@ -123,16 +120,16 @@ const AnswerCard: React.FC<AnswerCard> = ({ answer, question }) => {
         console.error("Error upVoting answer:", error);
       }
 
+      dispatch(
+        upVoteAnswer({ answerId: answer._id, questionId: question._id })
+      );
+
       setVoted(true);
     }
   };
 
   const downVoteHandler = async () => {
     if (!voted) {
-      dispatch(
-        downVoteAnswer({ answerId: answer._id, questionId: question._id })
-      );
-
       try {
         const tempToken = localStorage.getItem("token");
         await fetch(
@@ -148,6 +145,10 @@ const AnswerCard: React.FC<AnswerCard> = ({ answer, question }) => {
         console.error("Error downVoting answer:", error);
       }
 
+      dispatch(
+        downVoteAnswer({ answerId: answer._id, questionId: question._id })
+      );
+
       setVoted(true);
     }
   };
@@ -157,13 +158,13 @@ const AnswerCard: React.FC<AnswerCard> = ({ answer, question }) => {
       <Card className={classes.card}>
         <Box className={classes.infoContainer}>
           <Box className={classes.votes}>
-            <Button onClick={upVoteHandler}>
+            <Button className={classes.button} onClick={upVoteHandler}>
               <ArrowDropUp style={{ fontSize: "34px" }} />
             </Button>
             <Typography style={{ fontSize: "30px" }}>
               {upVotes - downVotes}
             </Typography>
-            <Button onClick={downVoteHandler}>
+            <Button className={classes.button} onClick={downVoteHandler}>
               <ArrowDropDown style={{ fontSize: "34px" }} />
             </Button>
           </Box>

@@ -6,12 +6,11 @@ import { setQuestionsList } from "../reducers/questionSlice";
 import { RootState } from "../store/store";
 
 const QuestionsList: React.FC = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state: RootState) => state.question.isLoading);
   const refreshQuestionsKey = useSelector(
     (state: RootState) => state.refreshQuestionsKey
   );
-  const isLoading = useSelector((state: RootState) => state.question.isLoading);
-  const dispatch = useDispatch();
-
   const filteredQuestions = useSelector((state: RootState) => {
     const searchQuery = state.question.searchQuery.toLowerCase();
     return state.question.questionsList.filter((question) =>
@@ -44,11 +43,12 @@ const QuestionsList: React.FC = () => {
         <CircularProgress />
       ) : (
         <Box>
-          {filteredQuestions.length === 0 ? (
-            <Typography>No questions yet!</Typography>
+          {Array.isArray(filteredQuestions) &&
+          filteredQuestions.length === 0 ? (
+            <Typography variant="h6">No questions yet!</Typography>
           ) : (
             <>
-              <Typography sx={{ marginBottom: "20px" }}>
+              <Typography variant="h6" sx={{ marginBottom: "20px" }}>
                 {filteredQuestions.length} questions
               </Typography>
               {filteredQuestions.map((question, index) => (

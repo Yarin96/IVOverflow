@@ -1,4 +1,5 @@
-import { AppBar, Typography, Toolbar, Grid, Button } from "@mui/material";
+import { AppBar, Typography, Toolbar, Grid, Button, Box } from "@mui/material";
+import { MeetingRoom, LayersOutlined } from "@mui/icons-material";
 import { Form, Link, useLocation, useRouteLoaderData } from "react-router-dom";
 import { useState } from "react";
 import SearchBar from "./SearchBar";
@@ -10,6 +11,7 @@ const MainNavigation = () => {
   const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  const username = localStorage.getItem("userName");
 
   return (
     <AppBar
@@ -32,6 +34,8 @@ const MainNavigation = () => {
                 <Typography
                   fontFamily={"'Rubik', sans-serif"}
                   style={{
+                    display: "flex",
+                    alignItems: "center",
                     color: "#000000",
                     paddingLeft: "20px",
                     paddingRight: "20px",
@@ -40,13 +44,20 @@ const MainNavigation = () => {
                     textDecoration: "none",
                   }}
                 >
-                  IVOverflow
+                  IVOverflow&nbsp;
+                  <LayersOutlined
+                    sx={{
+                      fontSize: "40px",
+                    }}
+                  />
                 </Typography>
               </Link>
             ) : (
               <Typography
                 fontFamily={"'Rubik', sans-serif"}
                 style={{
+                  display: "flex",
+                  alignItems: "center",
                   color: "#000000",
                   paddingLeft: "20px",
                   paddingRight: "20px",
@@ -54,7 +65,12 @@ const MainNavigation = () => {
                   fontSize: "34px",
                 }}
               >
-                IVOverflow
+                IVOverflow&nbsp;
+                <LayersOutlined
+                  sx={{
+                    fontSize: "40px",
+                  }}
+                />
               </Typography>
             )}
           </Grid>
@@ -62,37 +78,56 @@ const MainNavigation = () => {
             <>
               <Grid xs={4} item style={{ display: "flex" }}>
                 <SearchBar />
-                <Button
-                  onClick={handleOpen}
-                  sx={{
-                    color: "black",
-                    fontWeight: "bold",
-                    height: "100%",
-                    "&:hover": {
-                      backgroundColor: "transparent",
-                      color: "#cb8d00",
-                    },
+                <Box
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingTop: "4px",
                   }}
                 >
-                  Ask Question
-                </Button>
+                  <Typography
+                    variant="body2"
+                    style={{ color: "black", fontSize: "14px" }}
+                  >
+                    Welcome back, {username}!
+                  </Typography>
+                  <Button
+                    onClick={handleOpen}
+                    sx={{
+                      color: "black",
+                      fontWeight: "bold",
+                      height: "100%",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                        color: "#cb8d00",
+                      },
+                    }}
+                  >
+                    Ask Question
+                  </Button>
+                </Box>
                 <AskQuestionModal open={openModal} onClose={handleClose} />
               </Grid>
-              <Grid xs={1} item style={{ display: "flex" }}>
+              <Grid
+                xs={1}
+                item
+                style={{ display: "flex", marginRight: "10px" }}
+              >
                 <Form action="/logout" method="post">
                   <Button
                     sx={{
                       color: "black",
                       fontWeight: "bold",
+                      height: "100%",
                       "&:hover": {
                         backgroundColor: "transparent",
                         color: "#cb8d00",
                       },
-                      height: "100%",
                     }}
                     type="submit"
                   >
-                    Logout
+                    <MeetingRoom />
+                    &nbsp;Logout
                   </Button>
                 </Form>
               </Grid>

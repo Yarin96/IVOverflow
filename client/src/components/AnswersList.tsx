@@ -24,6 +24,7 @@ interface QuestionCard {
       answeredOn: Date;
       upVotes: number;
       downVotes: number;
+      votes: { upVotes: string[]; downVotes: string[] };
     }[];
   };
 }

@@ -27,6 +27,7 @@ interface QuestionCard {
       upVotes: number;
       downVotes: number;
       answeredOn: Date;
+      votes: { upVotes: string[]; downVotes: string[] };
     }[];
     formattedTime: string;
   };
@@ -119,7 +120,7 @@ const QuestionCard: React.FC<QuestionCard> = ({ question }) => {
     <Card className={classes.card}>
       <CardContent>
         <Box className={classes.statsContainer}>
-          <Typography variant="h6">{upVotes - downVotes} Votes</Typography>
+          <Typography variant="h6">{upVotes + downVotes} Votes</Typography>
         </Box>
         <Box className={classes.statsContainer}>
           <Typography variant="h6">{question.noOfAnswers} Answers</Typography>

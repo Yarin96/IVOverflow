@@ -30,6 +30,7 @@ interface Answer {
   upVotes: number;
   downVotes: number;
   answeredOn: Date;
+  votes: { upVotes: string[]; downVotes: string[] };
 }
 
 const initialState: QuestionState = {
@@ -81,6 +82,7 @@ const questionSlice = createSlice({
         const answer = question.answer.find((a) => a._id === answerId);
         if (answer) {
           answer.upVotes += 1;
+          question.upVotes += 1;
         }
       }
     },
@@ -98,6 +100,7 @@ const questionSlice = createSlice({
         const answer = question.answer.find((a) => a._id === answerId);
         if (answer) {
           answer.downVotes += 1;
+          question.downVotes += 1;
         }
       }
     },

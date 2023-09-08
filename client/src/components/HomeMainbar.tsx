@@ -1,22 +1,16 @@
-import { useLocation } from "react-router-dom";
 import MainContainer from "../shared/components/Container/MainContainer";
 import QuestionsList from "./QuestionsList";
+import { List, Typography } from "@mui/material";
 
 const HomeMainbar = () => {
-  const location = useLocation();
-
   return (
     <MainContainer>
-      <div>
-        {location.pathname === "/questions" ? (
-          <h1>Latest Questions</h1>
-        ) : (
-          <h1>All Questions</h1>
-        )}
-      </div>
-      <div>
+      <Typography variant="h3" sx={{ marginTop: "46px", fontWeight: "bold" }}>
+        All Questions 💡
+      </Typography>
+      <List>
         <QuestionsList />
-      </div>
+      </List>
     </MainContainer>
   );
 };
