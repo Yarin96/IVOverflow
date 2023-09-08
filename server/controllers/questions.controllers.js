@@ -74,3 +74,63 @@ export async function getAllAnswers(req, res, next) {
     return next(errorThrown);
   }
 }
+
+export async function upVoteAnswer(req, res, next) {
+  try {
+    const question = await Question.findById(req.params.questionId);
+
+    if (!question) {
+      const errorThrown = new HttpError("Question not found.", 404);
+      return next(errorThrown);
+    }
+
+    const answer = question.answer.find(
+      (a) => a._id.toString() === req.params.answerId
+    );
+
+    if (!answer) {
+      const errorThrown = new HttpError("Answer not found.", 404);
+      return next(errorThrown);
+    }
+
+    answer.upVotes += 1;
+    question.upVotes += 1;
+
+    await question.save();
+
+    res.status(200).json("Upvoted the answer successfully.");
+  } catch (error) {
+    const errorThrown = new HttpError("Couldn't upvote the answer.", 409);
+    return next(errorThrown);
+  }
+}
+
+export async function downVoteAnswer(req, res, next) {
+  try {
+    const question = await Question.findById(req.params.questionId);
+
+    if (!question) {
+      const errorThrown = new HttpError("Question not found.", 404);
+      return next(errorThrown);
+    }
+
+    const answer = question.answer.find(
+      (a) => a._id.toString() === req.params.answerId
+    );
+
+    if (!answer) {
+      const errorThrown = new HttpError("Answer not found.", 404);
+      return next(errorThrown);
+    }
+
+    answer.downVotes += 1;
+    question.downVotes += 1;
+
+    await question.save();
+
+    res.status(200).json("Downvoted the answer successfully.");
+  } catch (error) {
+    const errorThrown = new HttpError("Couldn't downvote the answer.", 409);
+    return next(errorThrown);
+  }
+}

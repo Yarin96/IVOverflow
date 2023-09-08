@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
-  upVotes: { type: [String], default: [] },
-  downVotes: { type: [String], default: [] },
+  upVotes: { type: Number, default: 0 },
+  downVotes: { type: Number, default: 0 },
   noOfAnswers: { type: Number, default: 0 },
   questionTitle: { type: String, required: "Question must have a title" },
   questionBody: { type: String, required: "Question must have a body" },
@@ -18,6 +18,8 @@ const questionSchema = new Schema({
       userAnswered: String,
       answeredOn: { type: Date, default: Date.now },
       userId: String,
+      upVotes: { type: Number, default: 0 },
+      downVotes: { type: Number, default: 0 },
     },
   ],
 });
