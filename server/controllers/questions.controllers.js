@@ -76,6 +76,9 @@ export async function getAllAnswers(req, res, next) {
 }
 
 export async function upVoteAnswer(req, res, next) {
+  const { answerId } = req.params;
+  const { userId } = req.userData;
+
   try {
     const question = await Question.findById(req.params.questionId);
 
@@ -84,17 +87,27 @@ export async function upVoteAnswer(req, res, next) {
       return next(errorThrown);
     }
 
-    const answer = question.answer.find(
-      (a) => a._id.toString() === req.params.answerId
-    );
+    const answer = question.answer.find((a) => a._id.toString() === answerId);
 
     if (!answer) {
       const errorThrown = new HttpError("Answer not found.", 404);
       return next(errorThrown);
     }
 
-    answer.upVotes += 1;
-    question.upVotes += 1;
+    const userHasUpVoted = answer.votes.upVotes.includes(userId);
+
+    if (!userHasUpVoted) {
+      answer.votes.upVotes.push(userId);
+      answer.upVotes += 1;
+      question.upVotes += 1;
+
+      const downVoteIndex = answer.votes.downVotes.indexOf(userId);
+      if (downVoteIndex !== -1) {
+        answer.votes.downVotes.splice(downVoteIndex, 1);
+        answer.downVotes -= 1;
+        question.downVotes -= 1;
+      }
+    }
 
     await question.save();
 
@@ -106,6 +119,9 @@ export async function upVoteAnswer(req, res, next) {
 }
 
 export async function downVoteAnswer(req, res, next) {
+  const { answerId } = req.params;
+  const { userId } = req.userData;
+
   try {
     const question = await Question.findById(req.params.questionId);
 
@@ -114,17 +130,27 @@ export async function downVoteAnswer(req, res, next) {
       return next(errorThrown);
     }
 
-    const answer = question.answer.find(
-      (a) => a._id.toString() === req.params.answerId
-    );
+    const answer = question.answer.find((a) => a._id.toString() === answerId);
 
     if (!answer) {
       const errorThrown = new HttpError("Answer not found.", 404);
       return next(errorThrown);
     }
 
-    answer.downVotes += 1;
-    question.downVotes += 1;
+    const userHasDownVoted = answer.votes.downVotes.includes(userId);
+
+    if (!userHasDownVoted) {
+      answer.votes.downVotes.push(userId);
+      answer.downVotes += 1;
+      question.downVotes += 1;
+
+      const upVoteIndex = answer.votes.upVotes.indexOf(userId);
+      if (upVoteIndex !== -1) {
+        answer.votes.upVotes.splice(upVoteIndex, 1);
+        answer.upVotes -= 1;
+        question.upVotes -= 1;
+      }
+    }
 
     await question.save();
 
