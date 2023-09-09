@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Modal from "../Modal/Modal";
 import { useState, useEffect } from "react";
 
@@ -37,7 +37,9 @@ const ErrorModal: React.FC<ErrorModalProps> = (props) => {
         </Button>
       }
     >
-      <p>{props.error.message}</p>
+      <Typography variant="h6" sx={{ textAlign: "center" }}>
+        {props.error.message}
+      </Typography>
     </Modal>
   );
 };

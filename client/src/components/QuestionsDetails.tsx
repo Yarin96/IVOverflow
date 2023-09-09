@@ -21,6 +21,7 @@ import MainContainer from "../shared/components/Container/MainContainer";
 import AnswersList from "./AnswersList";
 import { incrementRefreshKey } from "../reducers/refreshAnswersKey";
 import { addAnswerToQuestion } from "../reducers/questionSlice";
+import ErrorModal from "../shared/components/UIElements/Modal/ErrorModal";
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -72,11 +73,16 @@ const QuestionDetails = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const [answer, setAnswer] = useState("");
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
   const questionsList = useSelector(
     (state: RootState) => state.question.questionsList
   );
+
+  const clearErrorHandler = () => {
+    setError("");
+  };
 
   const question = questionsList?.find((q) => q._id === id);
 
@@ -87,13 +93,13 @@ const QuestionDetails = () => {
   const postAnswerHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (answer.trim() === "") {
-      alert("Enter an answer before submitting! 🧐");
+      setError("Enter an answer before submitting! 🧐");
     } else {
       const tempToken = localStorage.getItem("token");
       const userName = localStorage.getItem("userName");
 
       if (question.userPosted === userName) {
-        alert("You cannot comment on your own question. 🤯");
+        setError("You cannot comment on your own question. 🤯");
         return;
       }
 
@@ -136,6 +142,9 @@ const QuestionDetails = () => {
 
   return (
     <MainContainer>
+      {error && (
+        <ErrorModal error={{ message: error }} onClear={clearErrorHandler} />
+      )}
       <Card className={classes.card}>
         <CardContent>
           <Box className={classes.link}>

@@ -15,6 +15,9 @@ import ErrorModal from "../shared/components/UIElements/Modal/ErrorModal";
 import { LoadingButton } from "@mui/lab";
 
 const AuthPage = () => {
+  const data: any = useActionData();
+  const navigation: any = useNavigation();
+  const [error, setError] = useState(undefined);
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -28,14 +31,10 @@ const AuthPage = () => {
     });
   };
 
-  const [error, setError] = useState(undefined);
-  const data: any = useActionData();
-
   useEffect(() => {
     setError(data);
   }, [data]);
 
-  const navigation: any = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
   const clearErrorHandler = () => {
