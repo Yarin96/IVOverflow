@@ -16,16 +16,6 @@ IVOverflow is a StackOverflow clone project that replicates the core functionali
 
 <br />
 
-### Demonstration Video 📹:
-
-https://github.com/Yarin96/IVOverflow/assets/94289687/e56c5603-ead4-4c30-82e0-d6526817f3b8
-    
-<br />
-
----
-
-<br />
-
 ### Key Features 🔑:
 
 - **Authentication**: User authentication with a secure SHA512 hash algorithm for password storage.
@@ -35,6 +25,16 @@ https://github.com/Yarin96/IVOverflow/assets/94289687/e56c5603-ead4-4c30-82e0-d6
 - **Answer Submission**: Users can submit answers to questions from the community.
 - **Answer Rating System**: Answers are rated by users, with the top-rated answers displayed at the top.
 
+<br />
+
+---
+
+<br />
+
+### Demonstration Video 📹:
+
+https://github.com/Yarin96/IVOverflow/assets/94289687/e56c5603-ead4-4c30-82e0-d6526817f3b8
+    
 <br />
 
 ---
