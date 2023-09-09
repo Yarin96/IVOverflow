@@ -109,3 +109,13 @@ To run IVOverflow locally, follow these steps:
      ```
 
 7. Access IVOverflow in your browser at the default URL: [http://localhost:5173](http://localhost:5173).
+
+8. Accounts available in the Database (Hard-coded):
+   ```sh
+   Email: a@a.com
+   Password: 123456123456
+   -
+   Email: b@b.com
+   Password: zxczxczxc
+   ```
+   
